@@ -8,9 +8,10 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-import tweet_sentiment
-
 app = Flask(__name__)
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+APP_STATIC = os.path.join(APP_ROOT, 'static')
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, parentdir)
@@ -39,7 +40,7 @@ def detail():
 			tweets.append({'handle':row[0], 'img':row[1], 'text':row[2]})
 		cursor.close()
 
-		scores = tweet_sentiment.sentiment([tweet['text'] for tweet in tweets])
+		scores = sentiment([tweet['text'] for tweet in tweets])
 		pos = 0
 		neg = 0
 		for i in range(len(tweets)):
@@ -63,6 +64,33 @@ def db_connect():
 def db_disconnect(exception=None):
 	g.db.close()
     
+def get_term_score(sent_fpath):
+	term_score = {} 
+	with open(sent_fpath) as fh:
+		for line in fh:
+			term, score = line.strip().split("\t")
+			term_score[term] = int(score)
+	return term_score
+
+def compute_sentiment_score(term_score, tweet):
+	score = 0.0
+	arr = tweet.split()
+	for word in arr:
+		if word in term_score:
+			score += term_score[word]
+	return score
+
+def sentiment(tweets):
+	sent_file = os.path.join(APP_STATIC, "word.txt")
+	term_score = get_term_score(sent_file)
+	
+	scores = []
+	for tweet in tweets:
+		scores.append(compute_sentiment_score(term_score, tweet))
+
+	return scores
+
+
 if __name__ == "__main__":
 	if socket.gethostbyname(socket.gethostname()).startswith('192'):
 		app.run(host='0.0.0.0', port=5000, debug=True)
