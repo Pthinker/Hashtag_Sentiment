@@ -5,7 +5,39 @@
 	<div class="offset2 span8">
 		<div class="row">
 			<div class="row text-center">
-				<h2>Tweets for {{}}</h2>
+				<h2>Tweets for {{hashtag}}</h2>
+			</div>
+			<div class="row text-center">
+				<div class="well well-small">
+					<h4>Overall Sentiment</h4>
+					<table style="width: 100%; margin: 1em auto;">
+
+					</table>
+				</div>
+
+				{% for tweet in tweets %}
+				<div class="well well-small">
+					<table style="width: 100%;">
+						<tbody>
+							<tr>
+								<td style="width: 64px; padding: 0.5em;">
+									<a href="http://www.twitter.com/{{tweet['handle']}}">
+										<img class="img-polaroid"
+										style="margin-right: 0.25em;"
+										src="{{tweet['img']}}" />
+									</a>
+								</td>
+								<td class="text-left">
+									<a href="http://www.twitter.com/{{tweet['handle']}}">@{{tweet['handle']}}</a>
+									<br/>
+									{{tweet['text']}}
+									<br/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,9 @@ app.config.from_object('config')
 @app.route('/')
 @app.route('/index')
 def index():
-	return render_template('index.html', hashtags=app.config['HASHTAGS'])
+	hashtags = app.config['HASHTAGS']
+	hashtags = [h.strip("#") for h in hashtags]	
+	return render_template('index.html', hashtags=hashtags)
 
 @app.route('/detail', methods=['GET'])
 def detail():
@@ -26,6 +28,7 @@ def detail():
 	if hashtag is None:
 		abort(404)
 	else:
+		hashtag = "#" + hashtag
 		cursor = g.db.cursor()
 		cursor.execute('select handle, profile_img, text from tweets where hashtag="%s"' % (hashtag))
 		rows = cursor.fetchall()
