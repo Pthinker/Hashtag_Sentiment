@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="tabbable">	
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#hashtag" data-toggle="tab">
+				<strong>Hashtags</strong>
+			</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="hashtag">
+			<div class="row text-center">
+				<h2>Hashtags</h2>
+			</div>
+			<div class="span11 text-center">
+				{% for h in hashtags %}
+				<div class="span2">
+					<a class="btn btn-info" style="margin: 0.25em auto;" href="/detail?hashtag={{h}}">{{h}}</a>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Sentiment</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+      body {
+        min-height: 2000px;
+        padding-top: 70px;
+      }
+      .label {
+        padding: 0.2em 0.6em 0.3em;
+        font-size: 75%;
+      }
+    </style>
+  </head>
+  
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand">Sentiment</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          {% macro nav_link(endpoint, name) %}
+            {% if endpoint == request.endpoint %}
+              <li class="active"><a href="{{ url_for(endpoint) }}">{{ name }}</a></li>
+            {%- else -%}
+              <li><a href="{{ url_for(endpoint) }}">{{ name }}</a></li>
+            {%- endif -%}
+          {% endmacro %}
+          <ul class="nav navbar-nav">
+            {{ nav_link('index', 'Home') }}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+        {% block content %}
+
+        {% endblock %}
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="../static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('#News').hide();
+      $('.container-toggler').click(function(){
+        $('.container-toggle').hide();
+        $($(this).attr('data-container-id')).show();
+      });
+    });
+    </script>
+  </body>
+</html>
