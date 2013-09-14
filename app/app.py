@@ -2,6 +2,7 @@ from flask import Flask, session, flash, request, g
 from flask import redirect, url_for, render_template
 import MySQLdb
 import time
+import socket
 import os
 import sys
 reload(sys)
@@ -43,5 +44,8 @@ def db_disconnect(exception=None):
 	g.db.close()
     
 if __name__ == "__main__":
-	app.run(debug=True)
+	if socket.gethostbyname(socket.gethostname()).startswith('192'):
+		app.run(host='0.0.0.0', port=5000, debug=True)
+	else:
+		app.run(debug=True)
 
