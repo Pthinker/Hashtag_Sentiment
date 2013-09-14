@@ -8,6 +8,8 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+import tweet_sentiment
+
 app = Flask(__name__)
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +38,22 @@ def detail():
 		for row in rows:
 			tweets.append({'handle':row[0], 'img':row[1], 'text':row[2]})
 		cursor.close()
-		return render_template('detail.html', hashtag=hashtag, tweets=tweets)
+
+		scores = tweet_sentiment.sentiment([tweet['text'] for tweet in tweets])
+		pos = 0
+		neg = 0
+		for i in range(len(tweets)):
+			tweets[i]['score'] = scores[i]
+			if scores[i] > 0.0:
+				pos += 1
+			elif scores[i] < 0.0:
+				neg += 1
+		if pos+neg == 0:
+			perc = [0.0, 0.0]
+		else:
+			perc = ["%.2f"%(pos/float(pos+neg)*100.0), "%.2f"%(neg/float(pos+neg)*100.0)]
+		
+		return render_template('detail.html', hashtag=hashtag, tweets=tweets, perc=perc)
 
 @app.before_request
 def db_connect():

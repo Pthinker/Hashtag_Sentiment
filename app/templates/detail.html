@@ -11,12 +11,31 @@
 				<div class="well well-small">
 					<h4>Overall Sentiment</h4>
 					<table style="width: 100%; margin: 1em auto;">
-
+						<tbody>
+							<tr>
+								<td width="{{perc[0]}}%" style="border: 1px solid rgb(79, 138,
+									16); background-color: rgb(191, 229,
+									127);">{{perc[0]}}% positive</td>
+								<td width="{{perc[1]}}%" style="border: 1px solid rgb(216, 0,
+									12); background-color: rgb(255, 110, 110);"/>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 
 				{% for tweet in tweets %}
-				<div class="well well-small">
+				{% if tweet['score'] > 0.0 %}
+				<div class="well well-small" style="background-color: rgb(223, 242, 191); border: 1px solid
+					rgb(79, 138, 16); margin-bottom: 10px; padding: 4px;">
+				{% endif %}
+				{% if tweet['score'] < 0.0 %}
+				<div class="well well-small" style="background-color: rgb(255, 186, 186); border: 1px solid
+					rgb(216, 0, 12); margin-bottom: 10px; padding: 4px;">
+				{% endif %}
+				{% if tweet['score'] == 0.0 %}
+				<div class="well well-small" style="background-color: rgb(241, 241, 241); border: 1px solid
+					rgb(128, 128, 128); margin-bottom: 10px; padding: 4px;">
+				{% endif %}
 					<table style="width: 100%;">
 						<tbody>
 							<tr>
