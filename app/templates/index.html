@@ -2,14 +2,21 @@
 
 {% block content %}
 
-<div class="tabbable">	
+<div class="row text-center">
+    <a href="/detail?place=dc" class="btn btn-primary btn-large">DC Metro</a><br /><br />
+    <a href="/detail?place=smith" class="btn btn-success btn-large">Smithsonian</a>
+</div>
+
+<!--
+<div class="tabbable">	    
 	<ul class="nav nav-tabs">
 		<li class="active">
 			<a href="#hashtag" data-toggle="tab">
-				<strong>Hashtags</strong>
+				<strong>Compare</strong>
 			</a>
 		</li>
-	</ul>
+    </ul>
+
 	<div class="tab-content">
 		<div class="tab-pane active" id="hashtag">
 			<div class="row text-center">
@@ -24,7 +31,8 @@
 				{% endfor %}
 			</div>
 		</div>
-	</div>
+    </div>
 </div>
+-->
 
 {% endblock %}

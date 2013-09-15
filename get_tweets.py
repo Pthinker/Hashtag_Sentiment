@@ -15,17 +15,26 @@ api = twitter.Api(consumer_key=config.TWITTER_CONSUMER_KEY,
 db = MySQLdb.connect("localhost", config.DB_USER, config.DB_PWD, config.DATABASE)
 cursor = db.cursor()
 
-for hashtag in config.HASHTAGS:
-	tweets = []
-	tweets.extend(api.GetSearch(hashtag, lang='en', count=10))
+hashtags = []
+hashtags.extend(config.DC_HASHTAGS)
+hashtags.extend(config.SMITH_HASHTAGS)
 
-	for tweet in tweets:
-		insert_query = """
-			insert into tweets (hashtag, handle, profile_img, text) 
-			values
-			(%s, %s, %s, %s)
-			"""
-		cursor.execute(insert_query, (hashtag, tweet.user.screen_name, tweet.user.profile_image_url, tweet.text.encode('utf-8')))
+for hashtag in hashtags:
+    tweets = []
+    tweets.extend(api.GetSearch(hashtag, lang='en', count=100))
+	
+    for tweet in tweets:
+        query = "SELECT COUNT(1) FROM tweets WHERE tweet_id=%s" % (tweet.id)
+        cursor.execute(query)
+        if cursor.fetchone()[0]:
+            continue
+        else:
+            insert_query = """
+			    insert into tweets (tweet_id, hashtag, handle, profile_img, text) 
+			    values
+			    (%s, %s, %s, %s, %s)
+			    """
+            cursor.execute(insert_query, (tweet.id, hashtag, tweet.user.screen_name, tweet.user.profile_image_url, tweet.text.encode('utf-8')))
 
 db.commit()
 cursor.close()
