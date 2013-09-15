@@ -2,6 +2,7 @@ from flask import Flask, session, flash, request, g
 from flask import redirect, url_for, render_template, abort
 import MySQLdb
 import time
+import pytz
 import socket
 import os
 import sys
@@ -45,7 +46,11 @@ def detail():
     
     tweets = []
     for row in rows:
-        ts = row[3].strftime('%I:%M%p, %B %d %Y')
+        gmt = pytz.timezone('GMT')
+        eastern = pytz.timezone('US/Eastern')
+        gmtdt = gmt.localize(row[3])
+        eastdt = gmtdt.astimezone(eastern)
+        ts = eastdt.strftime('%I:%M%p, %B %d %Y')
         tweets.append({'handle':row[0], 'img':row[1], 'text':row[2], 'created_at':ts})
     
     cursor.close()
