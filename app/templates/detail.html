@@ -17,7 +17,7 @@
 									16); background-color: rgb(191, 229,
 									127);">{{perc[0]}}% positive</td>
 								<td width="{{perc[1]}}%" style="border: 1px solid rgb(216, 0,
-									12); background-color: rgb(255, 110, 110);"/>
+                                    12); background-color: rgb(255, 110, 110);">{{perc[1]}}% negtive</td>
 							</tr>
 						</tbody>
 					</table>
@@ -50,7 +50,10 @@
 									<a href="http://www.twitter.com/{{tweet['handle']}}">@{{tweet['handle']}}</a>
 									<br/>
 									{{tweet['text']}}
-									<br/>
+                                    <br/>
+                                    <small style="color: rgb(102, 102, 102);">
+                                        {{tweet['created_at']}}
+                                    </small>
 								</td>
 							</tr>
 						</tbody>

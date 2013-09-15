@@ -2,6 +2,7 @@
 
 import twitter
 import MySQLdb
+import time
 
 import config
 
@@ -30,11 +31,13 @@ for hashtag in hashtags:
             continue
         else:
             insert_query = """
-			    insert into tweets (tweet_id, hashtag, handle, profile_img, text) 
+			    insert into tweets (tweet_id, hashtag, handle, profile_img, text, created_at) 
 			    values
-			    (%s, %s, %s, %s, %s)
+			    (%s, %s, %s, %s, %s, %s)
 			    """
-            cursor.execute(insert_query, (tweet.id, hashtag, tweet.user.screen_name, tweet.user.profile_image_url, tweet.text.encode('utf-8')))
+            ts = time.strftime('%Y-%m-%d %H:%M:%S', time.strptime(tweet.created_at, '%a %b %d %H:%M:%S +0000 %Y'))
+            cursor.execute(insert_query, (tweet.id, hashtag, tweet.user.screen_name, 
+                tweet.user.profile_image_url, tweet.text.encode('utf-8'), ts))
 
 db.commit()
 cursor.close()

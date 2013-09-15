@@ -21,8 +21,6 @@ app.config.from_object('config')
 @app.route('/')
 @app.route('/index')
 def index():
-    #hashtags = app.config['HASHTAGS']
-    #hashtags = [h.strip("#") for h in hashtags]
     return render_template('index.html')
 
 @app.route('/detail', methods=['GET'])
@@ -39,7 +37,7 @@ def detail():
             name = "Smithsonian"
 
     cursor = g.db.cursor()
-    query = 'select handle, profile_img, text from tweets where hashtag in (%s)'
+    query = 'select handle, profile_img, text, created_at from tweets where hashtag in (%s) order by created_at desc limit 100'
     in_p = ', '.join(list(map(lambda x: '%s', hashtags)))
     query = query % in_p
     cursor.execute(query, hashtags)
@@ -47,7 +45,8 @@ def detail():
     
     tweets = []
     for row in rows:
-        tweets.append({'handle':row[0], 'img':row[1], 'text':row[2]})
+        ts = row[3].strftime('%I:%M%p, %B %d %Y')
+        tweets.append({'handle':row[0], 'img':row[1], 'text':row[2], 'created_at':ts})
     
     cursor.close()
 
