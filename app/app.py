@@ -34,8 +34,8 @@ def detail():
         if place == 'dc':
             hashtags = app.config['DC_HASHTAGS']
         else:
-            hashtags = app.config['SMITH_HASHTAGS']
-            name = "Smithsonian"
+            hashtags = app.config['GWU_HASHTAGS']
+            name = "GWU"
 
     cursor = g.db.cursor()
     query = 'select handle, profile_img, text, created_at from tweets where hashtag in (%s) order by created_at desc limit 100'

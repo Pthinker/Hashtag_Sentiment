@@ -18,7 +18,7 @@ cursor = db.cursor()
 
 hashtags = []
 hashtags.extend(config.DC_HASHTAGS)
-hashtags.extend(config.SMITH_HASHTAGS)
+hashtags.extend(config.GWU_HASHTAGS)
 
 for hashtag in hashtags:
     tweets = []
