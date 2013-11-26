@@ -24,6 +24,10 @@ app.config.from_object('config')
 def index():
     return render_template('index.html')
 
+@app.route('/histogram')
+def histogram():
+    return render_template('histogram.html')
+
 @app.route('/detail', methods=['GET'])
 def detail():
     place = request.args.get('place', None)

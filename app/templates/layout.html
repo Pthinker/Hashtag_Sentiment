@@ -25,6 +25,46 @@
         padding: 0.2em 0.6em 0.3em;
         font-size: 75%;
       }
+      
+      .chart div {
+        font: 10px sans-serif;
+        background-color: steelblue;
+        text-align: right;
+        padding: 3px;
+        margin: 1px;
+        color: white;
+      }
+      .chart rect {
+        fill: steelblue;
+      }
+      .chart text {
+        fill: white;
+        font: 10px sans-serif;
+        text-anchor: end;
+      }
+      
+      .bar {
+        fill: steelblue;
+      }
+
+      .bar:hover {
+          fill: brown;
+      }
+
+      .axis {
+          font: 10px sans-serif;
+      }
+ 
+      .axis path,
+      .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+      }
+
+      .x.axis path {
+          display: none;
+      }
     </style>
   </head>
   
@@ -51,6 +91,7 @@
           {% endmacro %}
           <ul class="nav navbar-nav">
             {{ nav_link('index', 'Home') }}
+            {{ nav_link('histogram', 'Histogram') }}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -71,8 +112,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="../static/js/jquery.min.js"></script>
     <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
-
-
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    
     <script type="text/javascript">
     $(document).ready(function(){
       $('#News').hide();
@@ -84,3 +125,7 @@
     </script>
   </body>
 </html>
+
+{% block endscript %}
+
+{% endblock %}
