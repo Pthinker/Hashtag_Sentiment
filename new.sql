@@ -6,6 +6,6 @@ CREATE TABLE `sentiment_history` (
       `pos_perc` decimal(10,2) DEFAULT NULL,
       `hour` int(11) DEFAULT NULL,
       `neg_perc` decimal(10,2) DEFAULT NULL,
+      `topic` varchar(5) DEFAULT NULL,
       PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-

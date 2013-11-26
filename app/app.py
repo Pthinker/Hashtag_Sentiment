@@ -26,7 +26,23 @@ def index():
 
 @app.route('/histogram')
 def histogram():
-    return render_template('histogram.html')
+    cursor = g.db.cursor()
+    query = "select hour, avg(neg_perc), avg(pos_perc) from sentiment_history where topic='dc' group by hour order by hour"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    dc_data = []
+    for row in rows:
+        dc_data.append([float(row[1]), float(row[2])])
+    
+    query = "select hour, avg(neg_perc), avg(pos_perc) from sentiment_history where topic='gwu' group by hour order by hour"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    gwu_data = []
+    for row in rows:
+        gwu_data.append([float(row[1]), float(row[2])])
+    
+    cursor.close()
+    return render_template('histogram.html', dc_data=dc_data, gwu_data=gwu_data)
 
 @app.route('/detail', methods=['GET'])
 def detail():

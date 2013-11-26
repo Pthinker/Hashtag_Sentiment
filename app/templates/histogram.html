@@ -2,52 +2,53 @@
 
 {% block content %}
 
-<div class="chart">
+<div id="dc_chart_div">
 </div>
 
-<svg class="chart"></svg>
+<br /><br />
+
+<div id="gwu_chart_div">
+</div>
 
 {% endblock %}
 
 {% block endscript %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Hour', 'Positive', 'Negative'],
+          ['9am',  {{dc_data[0][0]}}, {{dc_data[0][1]}}],
+          ['12pm', {{dc_data[1][0]}}, {{dc_data[1][1]}}],
+          ['7pm',  {{dc_data[2][0]}}, {{dc_data[2][1]}}],
+          ['11pm', {{dc_data[3][0]}}, {{dc_data[3][1]}}]
+        ]);
 
-<script>
-var width = 960,
-    height = 500;
+        var options = {
+          title: 'DC Metro Sentiment',
+          vAxis: {title: 'Hour',  titleTextStyle: {color: 'red'}}
+        };
 
-var y = d3.scale.linear()
-    .range([height, 0]);
+        var chart = new google.visualization.BarChart(document.getElementById('dc_chart_div'));
+        chart.draw(data, options);
 
-var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", height);
+        var data = google.visualization.arrayToDataTable([
+          ['Hour', 'Positive', 'Negative'],
+          ['9am',  {{gwu_data[0][0]}}, {{gwu_data[0][1]}}],
+          ['12pm', {{gwu_data[1][0]}}, {{gwu_data[1][1]}}],
+          ['7pm',  {{gwu_data[2][0]}}, {{gwu_data[2][1]}}],
+          ['11pm', {{gwu_data[3][0]}}, {{gwu_data[3][1]}}]
+        ]);
 
-d3.tsv("data.tsv", type, function(error, data) {
-  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+        var options = {
+          title: 'GWU Sentiment',
+          vAxis: {title: 'Hour',  titleTextStyle: {color: 'red'}}
+        };
 
-  var barWidth = width / data.length;
-
-  var bar = chart.selectAll("g")
-      .data(data)
-    .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(" + i * barWidth + ",0)"; });
-
-  bar.append("rect")
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); })
-      .attr("width", barWidth - 1);
-
-  bar.append("text")
-      .attr("x", barWidth / 2)
-      .attr("y", function(d) { return y(d.value) + 3; })
-      .attr("dy", ".75em")
-      .text(function(d) { return d.value; });
-});
-
-function type(d) {
-  d.value = +d.value; // coerce to number
-  return d;
-}
-</script>
-
+        var chart = new google.visualization.BarChart(document.getElementById('gwu_chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 {% endblock %}
