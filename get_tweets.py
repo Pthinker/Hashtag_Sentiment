@@ -16,7 +16,7 @@ api = twitter.Api(consumer_key=config.TWITTER_CONSUMER_KEY,
 #api.VerifyCredentials()
 
 term_score = {}
-with open("app/word.txt") as fh:
+with open("/home/ubuntu/sentiment/app/word.txt") as fh:
     for line in fh:
         term, score = line.strip().split("\t")
         term_score[term] = int(score)
