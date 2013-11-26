@@ -2,6 +2,7 @@
 
 import twitter
 import MySQLdb
+import socket
 import time
 from datetime import datetime
 import pytz
@@ -16,7 +17,12 @@ api = twitter.Api(consumer_key=config.TWITTER_CONSUMER_KEY,
 #api.VerifyCredentials()
 
 term_score = {}
-with open("/home/ubuntu/sentiment/app/word.txt") as fh:
+if socket.gethostbyname(socket.gethostname()).startswith('10'):
+    path = "app/word.txt"
+else:
+    path = "/home/ubuntu/sentiment/app/word.txt"
+
+with open(path) as fh:
     for line in fh:
         term, score = line.strip().split("\t")
         term_score[term] = int(score)
@@ -38,6 +44,7 @@ hashtags.extend(config.GWU_HASHTAGS)
 
 count = 0
 pos_count = 0
+neg_count = 0
 for hashtag in hashtags:
     tweets = []
     tweets.extend(api.GetSearch(hashtag, lang='en', count=100))
@@ -59,13 +66,17 @@ for hashtag in hashtags:
                 tweet.user.profile_image_url, text, ts))
             
             count += 1
-            if compute_sentiment_score(text) > 0.0:
+            score = compute_sentiment_score(text)
+            if score > 0.0:
                 pos_count += 1
-            
+            elif score < 0.0:
+                neg_count += 1
 if count == 0:
-    perc = 0.0
+    pos_perc = 0.0
+    neg_perc = 0.0
 else:
-    perc = float(pos_count) / count
+    pos_perc = float(pos_count) / count
+    neg_perc = float(neg_count) / count
 
 utc = pytz.timezone('UTC')
 eastern = pytz.timezone('US/Eastern')
@@ -73,11 +84,11 @@ utcdt = utc.localize(datetime.today())
 eastdt = utcdt.astimezone(eastern)
 
 insert_query = """
-    insert into sentiment_history (logged_at, hour, pos_perc) 
+    insert into sentiment_history (logged_at, hour, pos_perc, neg_perc) 
 	values
-    (%s, %s, %s)
+    (%s, %s, %s, %s)
 """
-cursor.execute(insert_query, (eastdt.strftime('%Y-%m-%d'), eastdt.hour, perc*100.0))
+cursor.execute(insert_query, (eastdt.strftime('%Y-%m-%d'), eastdt.hour, pos_perc*100.0, neg_perc*100.0))
 
 
 db.commit()
